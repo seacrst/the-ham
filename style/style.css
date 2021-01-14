@@ -192,8 +192,8 @@ a {text-decoration: none;}
 }
 .-squares_c {
     display: grid;
-    grid-template-columns: repeat(4, 482px);
-    grid-template-rows: 377px;
+    grid-template-columns: repeat(4, 432px);
+    grid-template-rows: 317px;
     list-style: none;
     padding: 0;
     margin: 0;

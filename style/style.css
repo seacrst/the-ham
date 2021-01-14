@@ -806,6 +806,10 @@ a {text-decoration: none;}
     align-items: center;
 }
 
+.-people-_switch_e:hover {
+    cursor: pointer;
+}
+
 .-people-_switch-_person {
     width: 67px;
     height: 67px;

@@ -114,6 +114,10 @@ function display (element, value, visibility) {
         element.forEach(elt => elt.style.display = "none");
     } else if (value === "class" && visibility === true) {
         element.forEach(elt => elt.style.display = "flex");
+    } else if (value === "element" && visibility === false) {
+        element.style.display = "none";
+    } else if (value === "element" && visibility === true) {
+        element.style.display = "flex";
     }    
 }
 
@@ -124,43 +128,44 @@ function styleSetting (element, index, prop, value) {
         element[index].style.transform = value;
     } else if (index === "css") {
         element.style.cssText = prop;
-    }
+    } 
 }
-
-display(two, "id", true);
-
-two.addEventListener ("click", (ev) => {
-    // two.style.cssText = "transition: transform 2s; transform: translate(500px);";
-    two.style.transition = "transform 5s";
-    two.style.transform = "translate(2500px)";
-    two.style.display = "none";
-    console.log("done");
-}, true)
 
 function findTargetSlide(value) {
     let result = value.getAttribute("id");
         return +result;
+    }
+
+
+function setAttr (elt) {
+    return elt.classList.add("selected");
 }
 
-function setTargetSlide(target, ev) {
-    target.classList.add("target-slide");
-    ev.setAttribute("id", "switch");
+function removeAttrs (elt) {
+    return elt.forEach(elt => elt.classList.remove("selected"));
 }
 
+function checkAttr (elt) {
+    return elt.classList.contains("selected");
+}
+
+display(two, "id", true);
 
 trigger.forEach(elt => elt.style.transition = "transform 0.6s");
 
 styleSetting(trigger, 2, "transform", "translateY(-22%)");
 
+setAttr(trigger[2]);
+
 trigger.forEach((elt, index, array) => {
-    elt.addEventListener("click", (ev) => {
+    elt.addEventListener("click", () => {
         
+
         trigger.forEach(elt => elt.style.transform = "unset");
         styleSetting(array, index, "transform", "translateY(-22%)");
 
         
-        if (index === findTargetSlide(zero)) {
-            // styleSetting(trigger, 2, "transform", "translateY(-22%)");
+        if (index === findTargetSlide(zero) && checkAttr(array[index]) === false) {
             
             target.forEach(elt => {
                 elt.style.transition = "transform 0.5s ease-in";
@@ -177,8 +182,7 @@ trigger.forEach((elt, index, array) => {
                 zero.style.transform = "translate(1px)";
             }, 550);
 
-        } else if (index === findTargetSlide(one)) {
-            // styleSetting(trigger, 2, "transform", "translateY(-22%)");
+        } else if (index === findTargetSlide(one) && checkAttr(array[index]) === false) {
             
             target.forEach(elt => {
                 elt.style.transition = "transform 0.5s ease-in";
@@ -194,8 +198,7 @@ trigger.forEach((elt, index, array) => {
                 one.style.transition = "transform 0.5s ease-in";
                 one.style.transform = "translate(1px)";
             }, 550);  
-        } else if (index === findTargetSlide(two)) {
-            // styleSetting(trigger, 2, "transform", "translateY(-22%)");
+        } else if (index === findTargetSlide(two) && checkAttr(array[index]) === false) {
             
             target.forEach(elt => {
                 elt.style.transition = "transform 0.5s ease-in";
@@ -211,9 +214,238 @@ trigger.forEach((elt, index, array) => {
                 two.style.transition = "transform 0.5s ease-in";
                 two.style.transform = "translate(1px)";
             }, 550);  
+        } else if (index === findTargetSlide(three) && checkAttr(array[index]) === false) {
+            
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(three, "id", true), 500);
+            
+            three.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                three.style.transition = "transform 0.5s ease-in";
+                three.style.transform = "translate(1px)";
+            }, 550);  
+        }
+        
+        removeAttrs(array);
+        setAttr(array[index])
+        
+    });
+})
+
+const leftClick = document.getElementById("left-click");
+const rightClick = document.getElementById("right-click");
+leftClick.style.outline = "none";
+rightClick.style.outline = "none";
+
+
+leftClick.addEventListener("click", (ev => {
+
+        if (trigger[2].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset")
+            removeAttrs(trigger);
+            trigger[1].style.transform = "translateY(-22%)";
+            trigger[1].classList.add("selected");
+
+            // ------------------------------------------
+
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(one, "id", true), 500);
+            
+            one.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                one.style.transition = "transform 0.5s ease-in";
+                one.style.transform = "translate(1px)";
+            }, 550); 
+            return;
         }
 
+
+        if (trigger[3].classList.contains("selected")) {
+            removeAttrs(trigger);
+            trigger.forEach(e => e.style.transform = "unset")
+            trigger[2].style.transform = "translateY(-22%)";
+            trigger[2].classList.add("selected");
+
+            // -------------------------------------
+
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(two, "id", true), 500);
+            
+            two.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                two.style.transition = "transform 0.5s ease-in";
+                two.style.transform = "translate(1px)";
+            }, 550);
+            return;
+        }
+            
+        if (trigger[0].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset")
+            removeAttrs(trigger);
+            trigger[3].style.transform = "translateY(-22%)";
+            trigger[3].classList.add("selected");
+
+            // -----------------------------------------------
+
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(three, "id", true), 500);
+            
+            three.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                three.style.transition = "transform 0.5s ease-in";
+                three.style.transform = "translate(1px)";
+            }, 550);
+            return;
+        }
         
-    
-    })
-})
+        if (trigger[1].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset")
+            removeAttrs(trigger);
+            trigger[0].style.transform = "translateY(-22%)";
+            trigger[0].classList.add("selected");
+
+            // ------------------------------------------------------------
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(zero, "id", true), 500);
+            
+            zero.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                zero.style.transition = "transform 0.5s ease-in";
+                zero.style.transform = "translate(1px)";
+            }, 550);
+        }
+}));
+
+rightClick.addEventListener("click", (ev => {
+
+        if (trigger[1].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset")
+            removeAttrs(trigger);
+            trigger[2].style.transform = "translateY(-22%)";
+            trigger[2].classList.add("selected");
+
+            // ------------------------------------------------------------
+            
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(two, "id", true), 500);
+            
+            two.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                two.style.transition = "transform 0.5s ease-in";
+                two.style.transform = "translate(1px)";
+            }, 550); 
+            return;
+        }
+
+        if (trigger[0].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset");
+            removeAttrs(trigger);
+            trigger[1].style.transform = "translateY(-22%)";
+            // trigger[0].classList.remove("ready");
+            trigger[1].classList.add("selected");
+
+
+            // -----------------------------------------------
+            
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(one, "id", true), 500);
+            
+            one.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                one.style.transition = "transform 0.5s ease-in";
+                one.style.transform = "translate(1px)";
+            }, 550); 
+            return;
+        }
+
+        if (trigger[3].classList.contains("selected")) {
+            removeAttrs(trigger);
+            trigger.forEach(e => e.style.transform = "unset")
+            trigger[0].style.transform = "translateY(-22%)";
+            trigger[0].classList.add("selected");
+            // -------------------------------------
+
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(zero, "id", true), 500);
+            
+            zero.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                zero.style.transition = "transform 0.5s ease-in";
+                zero.style.transform = "translate(1px)";
+            }, 550);
+            return;
+        }
+
+        if (trigger[2].classList.contains("selected")) {
+            trigger.forEach(e => e.style.transform = "unset")
+            removeAttrs(trigger);
+            trigger[3].style.transform = "translateY(-22%)";
+            trigger[3].classList.add("selected");
+
+
+            target.forEach(elt => {
+                elt.style.transition = "transform 0.5s ease-in";
+                elt.style.transform = "translate(200px)";
+                setTimeout(() => elt.style.display = "none", 500);
+            })
+            
+            setTimeout(() => display(three, "id", true), 500);
+            
+            three.style.transform = "translate(-200px)";
+            
+            setTimeout(() => {
+                three.style.transition = "transform 0.5s ease-in";
+                three.style.transform = "translate(1px)";
+            }, 550);  
+            return;
+        }
+        
+}));
